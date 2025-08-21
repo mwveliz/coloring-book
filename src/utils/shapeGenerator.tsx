@@ -1,5 +1,10 @@
 // Professional coloring book shape generators
-export const generateShape = (type: string, x: number, y: number): JSX.Element => {
+export const generateShape = (
+  type: string,
+  x: number,
+  y: number,
+  size: number = 1
+): JSX.Element => {
   const strokeProps = {
     fill: 'none',
     stroke: '#000',
@@ -11,7 +16,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
   switch (type) {
     case 'tree':
       return (
-        <g key={`tree-${Date.now()}-${Math.random()}`}>
+        <g key={`tree-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Tree trunk with texture lines */}
           <path
             d={`M${x-4} ${y+20} Q${x-2} ${y+15} ${x-3} ${y+10} Q${x-1} ${y+5} ${x} ${y} Q${x+1} ${y+5} ${x+3} ${y+10} Q${x+2} ${y+15} ${x+4} ${y+20} Z`}
@@ -36,7 +41,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'flower':
       return (
-        <g key={`flower-${Date.now()}-${Math.random()}`}>
+        <g key={`flower-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Flower stem with leaves */}
           <path d={`M${x} ${y+15} Q${x-2} ${y+25} ${x} ${y+35} Q${x+1} ${y+45} ${x-1} ${y+50}`} {...strokeProps} />
           
@@ -62,7 +67,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'house':
       return (
-        <g key={`house-${Date.now()}-${Math.random()}`}>
+        <g key={`house-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* House base */}
           <rect x={x-25} y={y-5} width="50" height="30" {...strokeProps} />
           
@@ -91,7 +96,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'bridge':
       return (
-        <g key={`bridge-${Date.now()}-${Math.random()}`}>
+        <g key={`bridge-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Bridge deck */}
           <path d={`M${x-30} ${y+5} Q${x} ${y-5} ${x+30} ${y+5}`} {...strokeProps} />
           <path d={`M${x-30} ${y+8} Q${x} ${y-2} ${x+30} ${y+8}`} {...strokeProps} />
@@ -116,7 +121,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'cloud':
       return (
-        <g key={`cloud-${Date.now()}-${Math.random()}`}>
+        <g key={`cloud-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Detailed cloud shape */}
           <path
             d={`M${x-20} ${y+2} Q${x-25} ${y-5} ${x-18} ${y-8} Q${x-15} ${y-12} ${x-8} ${y-10} Q${x-5} ${y-15} ${x+2} ${y-12} Q${x+8} ${y-16} ${x+15} ${y-12} Q${x+20} ${y-8} ${x+18} ${y-2} Q${x+22} ${y+3} ${x+15} ${y+6} Q${x+8} ${y+8} ${x} ${y+6} Q${x-8} ${y+8} ${x-15} ${y+6} Q${x-22} ${y+3} ${x-20} ${y+2} Z`}
@@ -131,7 +136,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'grass':
       return (
-        <g key={`grass-${Date.now()}-${Math.random()}`}>
+        <g key={`grass-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Multiple grass blades */}
           <path d={`M${x-15} ${y+10} Q${x-14} ${y-5} ${x-12} ${y-8} Q${x-10} ${y-5} ${x-9} ${y+10}`} {...strokeProps} />
           <path d={`M${x-8} ${y+10} Q${x-7} ${y-3} ${x-5} ${y-6} Q${x-3} ${y-3} ${x-2} ${y+10}`} {...strokeProps} />
@@ -147,7 +152,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'sun':
       return (
-        <g key={`sun-${Date.now()}-${Math.random()}`}>
+        <g key={`sun-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Sun center with face */}
           <circle cx={x} cy={y} r="15" {...strokeProps} />
           
@@ -180,7 +185,7 @@ export const generateShape = (type: string, x: number, y: number): JSX.Element =
 
     case 'butterfly':
       return (
-        <g key={`butterfly-${Date.now()}-${Math.random()}`}>
+        <g key={`butterfly-${Date.now()}-${Math.random()}`} transform={`translate(${x},${y}) scale(${size}) translate(${-x},${-y})`}>
           {/* Butterfly body */}
           <path d={`M${x} ${y-15} Q${x+1} ${y-10} ${x} ${y-5} Q${x-1} ${y} ${x} ${y+5} Q${x+1} ${y+10} ${x} ${y+15}`} {...strokeProps} />
           

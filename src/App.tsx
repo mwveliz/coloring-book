@@ -6,14 +6,17 @@ import { Palette } from 'lucide-react';
 
 function App() {
   const [elements, setElements] = useState<JSX.Element[]>([]);
+  const [shapeSize, setShapeSize] = useState(1); // 1x por defecto
+  const [shapeCount, setShapeCount] = useState(1); // 1 por defecto
 
   const handleAddElement = (type: string) => {
-    // Generate random position within the drawing area
-    const x = 50 + Math.random() * 500; // Keep within bounds
-    const y = 50 + Math.random() * 300;
-    
-    const newElement = generateShape(type, x, y);
-    setElements(prev => [...prev, newElement]);
+    const newElements: JSX.Element[] = [];
+    for (let i = 0; i < shapeCount; i++) {
+      const x = 50 + Math.random() * 500;
+      const y = 50 + Math.random() * 300;
+      newElements.push(generateShape(type, x, y, shapeSize));
+    }
+    setElements(prev => [...prev, ...newElements]);
   };
 
   const handleClear = () => {
@@ -84,6 +87,32 @@ function App() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Tools Panel */}
           <div className="lg:col-span-1">
+            {/* NUEVOS CONTROLES */}
+            <div className="mb-4 bg-white rounded-lg p-3 border border-gray-200">
+              <label className="block text-xs font-semibold mb-1">Tamaño de figura</label>
+              <input
+                type="range"
+                min={0.5}
+                max={2}
+                step={0.1}
+                value={shapeSize}
+                onChange={e => setShapeSize(Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="text-xs text-gray-500 mb-2">x{shapeSize.toFixed(1)}</div>
+              <label className="block text-xs font-semibold mb-1">Cantidad al hacer clic</label>
+              <input
+                type="range"
+                min={1}
+                max={5}
+                step={1}
+                value={shapeCount}
+                onChange={e => setShapeCount(Number(e.target.value))}
+                className="w-full"
+              />
+              <div className="text-xs text-gray-500">x{shapeCount}</div>
+            </div>
+            {/* FIN NUEVOS CONTROLES */}
             <DrawingTools
               onAddElement={handleAddElement}
               onClear={handleClear}
