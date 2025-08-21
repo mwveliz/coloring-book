@@ -130,7 +130,7 @@ function App() {
                 <li>• Haz clic en cualquier herramienta para agregarla al dibujo</li>
                 <li>• Los elementos aparecen en posiciones aleatorias</li>
                 <li>• Usa "Borrar todo" para empezar de nuevo</li>
-                <li>• Exporta como PNG cuando estés satisfecho</li>
+                <li>• Exporta como PNG para descargar la imagen</li>
               </ul>
             </div>
           </div>
