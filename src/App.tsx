@@ -33,45 +33,7 @@ function App() {
     const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
   <rect x="${10 * scale}" y="${10 * scale}" width="${580 * scale}" height="${380 * scale}" fill="white" stroke="none"/>
-  ${elements.map(element => {
-    const props = element.props;
-    const tag = element.type as string;
-    if (tag === 'g') {
-      return `<g>${element.props.children.map((child: any) => {
-        const childProps = child.props;
-        const childTag = child.type as string;
-        const attrs = Object.entries(childProps)
-          .filter(([key]) => key !== 'children')
-          .map(([key, value]) => {
-            // Escala atributos numéricos relevantes
-            if (['x', 'y', 'cx', 'cy', 'r', 'width', 'height'].includes(key) && !isNaN(Number(value))) {
-              return `${key}="${Number(value) * scale}"`;
-            }
-            if (key === 'd' && typeof value === 'string') {
-              // Escala los valores de los paths SVG
-              return `${key}="${value.replace(/-?\d+(\.\d+)?/g, n => String(Number(n) * scale))}"`;
-            }
-            return `${key}="${value}"`;
-          })
-          .join(' ');
-        return `<${childTag} ${attrs}/>`;
-      }).join('')}</g>`;
-    } else {
-      const attrs = Object.entries(props)
-        .filter(([key]) => key !== 'children')
-        .map(([key, value]) => {
-          if (['x', 'y', 'cx', 'cy', 'r', 'width', 'height'].includes(key) && !isNaN(Number(value))) {
-            return `${key}="${Number(value) * scale}"`;
-          }
-          if (key === 'd' && typeof value === 'string') {
-            return `${key}="${value.replace(/-?\d+(\.\d+)?/g, n => String(Number(n) * scale))}"`;
-          }
-          return `${key}="${value}"`;
-        })
-        .join(' ');
-      return `<${tag} ${attrs}/>`;
-    }
-  }).join('\n  ')}
+  ${elements.map(element => jsxToSvgString(element, scale)).join('\n  ')}
 </svg>`;
 
     // Convierte el SVG a un data URL
@@ -190,6 +152,33 @@ function App() {
       </div>
     </div>
   );
+}
+
+function jsxToSvgString(element: any, scale = 1): string {
+  if (!element) return '';
+  if (Array.isArray(element)) {
+    return element.map(child => jsxToSvgString(child, scale)).join('');
+  }
+  const { type, props } = element;
+  const tag = typeof type === 'string' ? type : null;
+  if (!tag) return '';
+  const attrs = Object.entries(props || {})
+    .filter(([k]) => k !== 'children')
+    .map(([k, v]) => {
+      // Escala atributos relevantes
+      if (['x', 'y', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height'].includes(k) && !isNaN(Number(v))) {
+        return `${k}="${Number(v) * scale}"`;
+      }
+      if (k === 'd' && typeof v === 'string') {
+        return `${k}="${v.replace(/-?\d+(\.\d+)?/g, n => String(Number(n) * scale))}"`;
+      }
+      return `${k}="${v}"`;
+    })
+    .join(' ');
+  const children = jsxToSvgString(props?.children, scale);
+  return children
+    ? `<${tag} ${attrs}>${children}</${tag}>`
+    : `<${tag} ${attrs}/>`;
 }
 
 export default App;
