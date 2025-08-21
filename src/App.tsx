@@ -24,48 +24,90 @@ function App() {
   };
 
   const handleExport = () => {
-    // Create SVG content
+    // FACTOR DE ESCALA PARA MAYOR RESOLUCIÓN
+    const scale = 2;
+    const width = 600 * scale;
+    const height = 400 * scale;
+
+    // Crea el SVG como string, ajustando el viewBox y el tamaño
     const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 600 400" xmlns="http://www.w3.2000/svg">
-  <rect x="10" y="10" width="580" height="380" fill="white" stroke="none"/>
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  <rect x="${10 * scale}" y="${10 * scale}" width="${580 * scale}" height="${380 * scale}" fill="white" stroke="none"/>
   ${elements.map(element => {
-    // Convert JSX element to SVG string
     const props = element.props;
     const tag = element.type as string;
-    
     if (tag === 'g') {
-      // Handle group elements
       return `<g>${element.props.children.map((child: any) => {
         const childProps = child.props;
         const childTag = child.type as string;
         const attrs = Object.entries(childProps)
           .filter(([key]) => key !== 'children')
-          .map(([key, value]) => `${key}="${value}"`)
+          .map(([key, value]) => {
+            // Escala atributos numéricos relevantes
+            if (['x', 'y', 'cx', 'cy', 'r', 'width', 'height'].includes(key) && !isNaN(Number(value))) {
+              return `${key}="${Number(value) * scale}"`;
+            }
+            if (key === 'd' && typeof value === 'string') {
+              // Escala los valores de los paths SVG
+              return `${key}="${value.replace(/-?\d+(\.\d+)?/g, n => String(Number(n) * scale))}"`;
+            }
+            return `${key}="${value}"`;
+          })
           .join(' ');
         return `<${childTag} ${attrs}/>`;
       }).join('')}</g>`;
     } else {
-      // Handle single elements
       const attrs = Object.entries(props)
         .filter(([key]) => key !== 'children')
-        .map(([key, value]) => `${key}="${value}"`)
+        .map(([key, value]) => {
+          if (['x', 'y', 'cx', 'cy', 'r', 'width', 'height'].includes(key) && !isNaN(Number(value))) {
+            return `${key}="${Number(value) * scale}"`;
+          }
+          if (key === 'd' && typeof value === 'string') {
+            return `${key}="${value.replace(/-?\d+(\.\d+)?/g, n => String(Number(n) * scale))}"`;
+          }
+          return `${key}="${value}"`;
+        })
         .join(' ');
       return `<${tag} ${attrs}/>`;
     }
   }).join('\n  ')}
 </svg>`;
 
-    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `coloring-book-${Date.now()}.svg`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    // Convierte el SVG a un data URL
+    const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new window.Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => {
+          if (blob) {
+            const pngUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = pngUrl;
+            a.download = `coloring-book-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+          }
+        }, 'image/png');
+      }
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => {
+      alert('Error exporting image');
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
   };
 
   return (
