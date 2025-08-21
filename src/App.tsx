@@ -118,11 +118,11 @@ function App() {
           <div className="flex items-center justify-center gap-3 mb-2">
             <Palette className="w-8 h-8 text-purple-600" />
             <h1 className="text-3xl font-bold text-gray-800">
-              Simple Coloring Book Creator
+              Creador de Chuvi Libros para Colorear
             </h1>
           </div>
           <p className="text-gray-600">
-            Click the tools below to add shapes to your coloring page
+            Las imagenes se posicionan de forma aleatoria en el lienzo. Puedes exportar como PNG.
           </p>
         </div>
 
@@ -163,12 +163,12 @@ function App() {
             
             {/* Instructions */}
             <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-800 mb-2">How to use:</h3>
+              <h3 className="font-semibold text-blue-800 mb-2">Instrucciones:</h3>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Click any tool to add it to your drawing</li>
-                <li>• Elements appear in random positions</li>
-                <li>• Use "Clear All" to start over</li>
-                <li>• Export as SVG when you're happy!</li>
+                <li>• Haz clic en cualquier herramienta para agregarla al dibujo</li>
+                <li>• Los elementos aparecen en posiciones aleatorias</li>
+                <li>• Usa "Borrar todo" para empezar de nuevo</li>
+                <li>• Exporta como PNG cuando estés satisfecho</li>
               </ul>
             </div>
           </div>
@@ -180,7 +180,7 @@ function App() {
             {/* Element Counter */}
             <div className="text-center mt-4 text-gray-600">
               {elements.length === 0 ? (
-                "Your canvas is empty - start adding shapes!"
+                "Tu lienzo está vacío - ¡empieza a agregar figuras!"
               ) : (
                 `${elements.length} element${elements.length !== 1 ? 's' : ''} on canvas`
               )}

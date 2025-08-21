@@ -21,11 +21,20 @@ export const DrawingTools: React.FC<DrawingToolsProps> = ({
     { icon: Cloud, label: 'Cloud', type: 'cloud' },
     { icon: Grass, label: 'Grass', type: 'grass' },
     { icon: Zap, label: 'Butterfly', type: 'butterfly' },
+    // Nuevos abstractos:
+    { icon: Sun, label: 'Paisaje', type: 'abstract-landscape' },
+    { icon: Trees, label: 'Montañas', type: 'abstract-mountains' },
+    { icon: Grass, label: 'Campos', type: 'abstract-fields' },
+    { icon: Zap, label: 'Remolinos', type: 'abstract-swirls' },
+    { icon: Sun, label: 'Aurora', type: 'background-aurora' },
+    { icon: Cloud, label: 'Mar', type: 'background-sea' },
+    { icon: Sun, label: 'Estrellas', type: 'background-stars' },
+    { icon: Grass, label: 'Dunas', type: 'background-dunes' },
   ];
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Drawing Tools</h2>
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">Herramientas de Dibujo</h2>
       
       <div className="grid grid-cols-4 gap-3 mb-6">
         {tools.map(({ icon: Icon, label, type }) => (
@@ -41,18 +50,18 @@ export const DrawingTools: React.FC<DrawingToolsProps> = ({
         ))}
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3">  
         <button
           onClick={onClear}
           className="flex-1 px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors duration-200 font-medium"
         >
-          Clear All
+          Limpiar lienzo
         </button>
         <button
           onClick={onExport}
           className="flex-1 px-4 py-2 bg-green-50 text-green-600 border border-green-200 rounded-lg hover:bg-green-100 transition-colors duration-200 font-medium"
         >
-          Export PNG
+          Exportar PNG
         </button>
       </div>
     </div>
